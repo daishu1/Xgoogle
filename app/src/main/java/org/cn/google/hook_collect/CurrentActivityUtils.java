@@ -1,8 +1,7 @@
-package org.cn.google;
+package org.cn.google.hook_collect;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.widget.Toast;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
@@ -31,16 +30,6 @@ public class CurrentActivityUtils extends XC_MethodHook {
         if (currentActivity != null) {
             currentActivity.runOnUiThread(runnable);
         }
-    }
-
-    public static void showToast(final String str) {
-        runOnUiThread(new Runnable() {
-            /* class com.game.common.CurrentActivityUtils.AnonymousClass1 */
-
-            public void run() {
-                Toast.makeText(CurrentActivityUtils.currentActivity, str, 1).show();
-            }
-        });
     }
 
 }

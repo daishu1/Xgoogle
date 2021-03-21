@@ -4,8 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.blankj.utilcode.util.ToastUtils;
-
+import org.cn.google.app.ProviderBridge;
+import org.cn.google.hook_collect.CollectionHooker;
 import org.cn.google.hook_import.ImportHooker;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -41,10 +41,16 @@ public class MainXposed implements IXposedHookLoadPackage {
             public void afterHookedMethod(XC_MethodHook.MethodHookParam methodHookParam) throws Throwable {
                 super.afterHookedMethod(methodHookParam);
                 Application application = (Application) methodHookParam.thisObject;
-                new ImportHooker().hook(application, loadPackageParam);
-//                new CollectionHooker().hook(loadPackageParam);
+                int hookStatus = ProviderBridge.getHookStatus(application);
+                if (hookStatus == 1) {
+                    new CollectionHooker().hook(loadPackageParam);
+                } else if (hookStatus == 2) {
+                    new ImportHooker().hook(application, loadPackageParam);
+                } else if (hookStatus == 3) {
 
-                ToastUtils.showLong("======" + loadPackageParam.processName + "=====");
+                }
+//                Toast.makeText(application,"HOOK STATUS ->" + ProviderBridge.getHookStatus(application),Toast.LENGTH_LONG).show();
+                XposedBridge.log("HOOK STATUS ->" + ProviderBridge.getHookStatus(application));
             }
         }});
     }

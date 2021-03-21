@@ -1,15 +1,12 @@
-package org.cn.google;
+package org.cn.google.hook_collect;
 
 import android.app.AndroidAppHelper;
 import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.blankj.utilcode.util.ToastUtils;
 

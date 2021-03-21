@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingResult;
@@ -16,59 +20,81 @@ import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.blankj.utilcode.util.GsonUtils;
+import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.ToastUtils;
+
+import org.cn.google.app.AppConstance;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements PurchasesUpdatedListener, BillingClientStateListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+
+    private TextView tvMainExitLogin, tvMainHookClear, tvMainUpdateTime, tvMainVersionCode;
+    private RadioButton rbMainHookCollect, rbMainHookImport, rbMainHookExport;
+    private RadioGroup rgMainHookGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BillingClientManager.init(this,this,this);
-        Button button = findViewById(R.id.buttonTest);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    BillingClientManager.querySkuDetailsAsync("inapp", new SkuDetailsResponseListener() {
+        initView();
+        initData();
+    }
 
-                        @Override
-                        public final void onSkuDetailsResponse(@NonNull BillingResult billingResult, @Nullable List<SkuDetails> list) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (billingResult.getResponseCode() != 0 || list == null) {
-                                        ToastUtils.showLong("==="+billingResult.getResponseCode() + "===" + GsonUtils.toJson(list));
-                                    } else {
-                                        ToastUtils.showLong("===请求成功===" + list.size());
-//                                        BillingClientManager.launchBillingFlow(MainActivity.this, (SkuDetails) list.get(0));
-                                    }
-                                }
-                            });
-                            Log.e("TAG",billingResult.getDebugMessage());
-                        }
-                    }, "34");
-                }catch (Exception e) {
-                    ToastUtils.showLong("Exception===" + e.getMessage());
-                }
-            }
-        });
+    private void initView() {
+        rgMainHookGroup = findViewById(R.id.rgMainHookGroup);
+        rbMainHookCollect = findViewById(R.id.rbMainHookCollect);
+        rbMainHookImport = findViewById(R.id.rbMainHookImport);
+        rbMainHookExport = findViewById(R.id.rbMainHookExport);
+        tvMainExitLogin = findViewById(R.id.tvMainExitLogin);
+        tvMainUpdateTime = findViewById(R.id.tvMainUpdateTime);
+        tvMainVersionCode = findViewById(R.id.tvMainVersionCode);
+        tvMainHookClear = findViewById(R.id.tvMainHookClear);
+
+        rgMainHookGroup.setOnCheckedChangeListener(this);
+        tvMainExitLogin.setOnClickListener(this);
+        tvMainHookClear.setOnClickListener(this);
+    }
+
+    private void initData() {
+        int status = SPStaticUtils.getInt(AppConstance.KEY_HOOK_STATUS);
+        if (status == 1) {
+            rbMainHookCollect.setChecked(true);
+        } else if (status == 2) {
+            rbMainHookImport.setChecked(true);
+        } else if (status == 3) {
+            rbMainHookExport.setChecked(true);
+        } else {
+            rgMainHookGroup.clearCheck();
+
+
+        }
     }
 
     @Override
-    public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+    public void onClick(View view) {
+        if (view.getId() == R.id.tvMainExitLogin) {
+            ToastUtils.showShort(SPStaticUtils.getInt(AppConstance.KEY_HOOK_STATUS));
 
+        } else if (view.getId() == R.id.tvMainHookClear) {
+            ToastUtils.showShort(SPStaticUtils.getInt(AppConstance.KEY_HOOK_STATUS));
+            tvMainHookClear.setEnabled(false);
+            rgMainHookGroup.clearCheck();
+            SPStaticUtils.remove(AppConstance.KEY_HOOK_STATUS);
+        }
     }
 
     @Override
-    public void onBillingServiceDisconnected() {
-
-    }
-
-    @Override
-    public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
-
+    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        if (i == R.id.rbMainHookCollect && rbMainHookCollect.isChecked()) {
+            tvMainHookClear.setEnabled(true);
+            SPStaticUtils.put(AppConstance.KEY_HOOK_STATUS, 1);
+        } else if (i == R.id.rbMainHookImport && rbMainHookImport.isChecked()) {
+            tvMainHookClear.setEnabled(true);
+            SPStaticUtils.put(AppConstance.KEY_HOOK_STATUS, 2);
+        } else if (i == R.id.rbMainHookExport && rbMainHookExport.isChecked()) {
+            tvMainHookClear.setEnabled(true);
+            SPStaticUtils.put(AppConstance.KEY_HOOK_STATUS, 3);
+        }
     }
 }

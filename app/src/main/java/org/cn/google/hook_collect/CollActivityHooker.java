@@ -1,4 +1,4 @@
-package org.cn.google;
+package org.cn.google.hook_collect;
 
 import android.app.Activity;
 import android.content.Intent;

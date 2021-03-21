@@ -59,21 +59,6 @@ public class BillingClientManager {
                 boolean unused = BillingClientManager.mIsServiceConnected = false;
                 BillingClientManager.stateListener.onBillingServiceDisconnected();
             }
-//            @Override // com.android.billingclient.api.AbstractC0055BillingClientStateListener
-//            public void onBillingSetupFinished(BillingResult billingResult) {
-//                if (billingResult.getResponseCode() == 0) {
-//                    boolean unused = BillingClientManager.mIsServiceConnected = true;
-//                    BillingClientManager.stateListener.onBillingSetupFinished(billingResult);
-//                    return;
-//                }
-//                BillingClientManager.stateListener.onBillingServiceDisconnected();
-//            }
-//
-//            @Override // com.android.billingclient.api.AbstractC0055BillingClientStateListener
-//            public void onBillingServiceDisconnected() {
-//                boolean unused = BillingClientManager.mIsServiceConnected = false;
-//                BillingClientManager.stateListener.onBillingServiceDisconnected();
-//            }
         });
     }
 

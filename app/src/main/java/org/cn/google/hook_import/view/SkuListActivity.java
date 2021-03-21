@@ -16,6 +16,7 @@ import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.blankj.utilcode.util.GsonUtils;
 
 import org.cn.google.BillingClientManager;
+import org.cn.google.common.ProtoDialog;
 
 import java.util.List;
 
@@ -25,12 +26,12 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BillingClientManager.init(this, this, this);
+
     }
 
     @Override
     public void onClick(View view) {
-//        ToastUtils.showLong("测试:" + getPackageName());
-
+        ProtoDialog.showLoadingDialog(this);
         BillingClientManager.querySkuDetailsAsync("inapp", new SkuDetailsResponseListener() {
             @Override
             public final void onSkuDetailsResponse(@NonNull BillingResult billingResult, @Nullable List<SkuDetails> list) {
@@ -39,9 +40,9 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
                 mEditText.setText(sb.toString());
 
                 BillingClientManager.launchBillingFlow(SkuListActivity.this, list.get(0));
-
+                ProtoDialog.dismissLoading();
             }
-        }, "34");
+        }, "33");
     }
 
     @Override

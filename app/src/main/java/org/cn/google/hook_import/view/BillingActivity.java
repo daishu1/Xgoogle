@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +34,7 @@ public class BillingActivity extends Activity implements View.OnClickListener {
         initRootView();
         initTestButton();
         initTestTextView();
+        initSkuListView();
 
         if (savedInstanceState == null) {
             handleEvent(getIntent());
@@ -50,7 +52,7 @@ public class BillingActivity extends Activity implements View.OnClickListener {
     private void initRootView() {
         mRootLinearLayout = new LinearLayout(this);
         mRootLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        mRootLinearLayout.setBackgroundColor(Color.BLACK);
+        mRootLinearLayout.setBackgroundColor(Color.parseColor("#333333"));
         LinearLayout.LayoutParams layoutParams =
                 new LinearLayout.LayoutParams(-1, -1);
         mRootLinearLayout.setLayoutParams(layoutParams);
@@ -67,6 +69,12 @@ public class BillingActivity extends Activity implements View.OnClickListener {
         mButton.setMinHeight(110);
         mButton.setOnClickListener(this);
         mRootLinearLayout.addView(mButton);
+    }
+
+    private void initSkuListView(){
+        ListView mListView = new ListView(this);
+        mListView.setAdapter(new SkuListAdapter(this));
+        mRootLinearLayout.addView(mListView);
     }
 
     private void initTestTextView() {
