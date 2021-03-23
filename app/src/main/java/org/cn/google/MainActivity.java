@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rgMainHookGroup.setOnCheckedChangeListener(this);
         tvMainExitLogin.setOnClickListener(this);
         tvMainHookClear.setOnClickListener(this);
+
+
     }
 
     private void initData() {
@@ -66,16 +70,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             rbMainHookExport.setChecked(true);
         } else {
             rgMainHookGroup.clearCheck();
-
-
         }
     }
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.tvMainExitLogin) {
-            ToastUtils.showShort(SPStaticUtils.getInt(AppConstance.KEY_HOOK_STATUS));
-
+            try {
+                Intent intent = new Intent("org.cn.google.PayActivity");
+                startActivity(intent);
+            } catch (Exception e) {
+                ToastUtils.showLong(e.getMessage());
+            }
         } else if (view.getId() == R.id.tvMainHookClear) {
             ToastUtils.showShort(SPStaticUtils.getInt(AppConstance.KEY_HOOK_STATUS));
             tvMainHookClear.setEnabled(false);

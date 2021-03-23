@@ -11,6 +11,14 @@ public class ProviderBridge {
         return getProviderData(context, AppConstance.KEY_HOOK_STATUS, null, new Bundle()).getInt(AppConstance.KEY_HOOK_STATUS);
     }
 
+    public static Bundle httpPutSkuDetails(Context context, Bundle bundle) throws Exception {
+        return getProviderData(context, AppConstance.HTTP_PUT_SKU_DETAILS, null, bundle);
+    }
+
+    public static Bundle httpGetSkuList(Context context, Bundle bundle) throws Exception {
+        return getProviderData(context, AppConstance.HTTP_GET_SKU_LIST, null, bundle);
+    }
+
     public static Bundle getProviderData(Context context, String str, String str2, Bundle bundle) throws Exception {
         try {
             return context.getContentResolver().call(Uri.parse(AppConstance.AUTHORITIES), str, str2, bundle);

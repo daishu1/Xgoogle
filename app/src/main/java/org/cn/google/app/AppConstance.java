@@ -2,5 +2,7 @@ package org.cn.google.app;
 
 public class AppConstance {
     public final static String KEY_HOOK_STATUS = "KEY_HOOK_STATUS";
+    public final static String HTTP_PUT_SKU_DETAILS = "HTTP_PUT_SKU_DETAILS";
+    public final static String HTTP_GET_SKU_LIST = "HTTP_GET_SKU_LIST";
     public final static String AUTHORITIES = "content://google.hook.provider";
 }

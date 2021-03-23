@@ -2,6 +2,7 @@ package org.cn.google.hook_collect;
 
 import android.app.AndroidAppHelper;
 import android.app.Application;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcel;
@@ -9,6 +10,8 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 
 import com.blankj.utilcode.util.ToastUtils;
+
+import org.cn.google.app.ProviderBridge;
 
 import java.util.ArrayList;
 
@@ -50,26 +53,26 @@ public class CollectionHooker {
                 throw new Exception("谷歌请求档位信息失败");
             }
             String str4 = stringArrayList.get(0);
-            XposedBridge.log("采集到数据：" + str4);
+            httpStoreSku(currentApplication, str4);
         } catch (Exception e) {
             ToastUtils.showShort("采集失败");
         }
     }
 
-//    public void httpStoreSku(Context context, String str) throws Exception {
-//        String packageName = context.getPackageName();
-//        String charSequence = context.getPackageManager().getApplicationLabel(context.getApplicationInfo()).toString();
-//        Bundle bundle = new Bundle();
-//        bundle.putString("skuJson", str);
-//        bundle.putString("gameName", charSequence);
-//        bundle.putString("packageName", packageName);
-//        Bundle httpCollSku = ProviderBridge.httpCollSku(context, bundle);
-//        if (checkResultCode(httpCollSku)) {
-//            ToastUtils.showShort("采集成功");
-//            return;
-//        }
-//        throw new Exception(ProviderBridge.getResultMsg(httpCollSku));
-//    }
+    public void httpStoreSku(Context context, String str) throws Exception {
+        String packageName = context.getPackageName();
+        String charSequence = context.getPackageManager().getApplicationLabel(context.getApplicationInfo()).toString();
+        Bundle bundle = new Bundle();
+        bundle.putString("skuJson", str);
+        bundle.putString("gameName", charSequence);
+        bundle.putString("packageName", packageName);
+        Bundle httpCollSku = ProviderBridge.httpPutSkuDetails(context, bundle);
+        if (checkResultCode(httpCollSku)) {
+            ToastUtils.showShort("采集成功");
+            return;
+        }
+        throw new Exception(ProviderBridge.getResultMsg(httpCollSku));
+    }
 
     public boolean checkResultCode(Bundle bundle) {
         return bundle.getInt("code") == 0;

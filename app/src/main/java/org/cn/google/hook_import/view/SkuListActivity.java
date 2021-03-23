@@ -29,21 +29,21 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
 
     }
 
-    @Override
-    public void onClick(View view) {
-        ProtoDialog.showLoadingDialog(this);
-        BillingClientManager.querySkuDetailsAsync("inapp", new SkuDetailsResponseListener() {
-            @Override
-            public final void onSkuDetailsResponse(@NonNull BillingResult billingResult, @Nullable List<SkuDetails> list) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("getResponseCode:").append(billingResult.getResponseCode()).append("\nList<SkuDetails>:").append(GsonUtils.toJson(list)).append("\n");
-                mEditText.setText(sb.toString());
-
-                BillingClientManager.launchBillingFlow(SkuListActivity.this, list.get(0));
-                ProtoDialog.dismissLoading();
-            }
-        }, "33");
-    }
+//    @Override
+//    public void onClick(View view) {
+//        ProtoDialog.showLoadingDialog(this);
+//        BillingClientManager.querySkuDetailsAsync("inapp", new SkuDetailsResponseListener() {
+//            @Override
+//            public final void onSkuDetailsResponse(@NonNull BillingResult billingResult, @Nullable List<SkuDetails> list) {
+//                StringBuilder sb = new StringBuilder();
+//                sb.append("getResponseCode:").append(billingResult.getResponseCode()).append("\nList<SkuDetails>:").append(GsonUtils.toJson(list)).append("\n");
+//                mEditText.setText(sb.toString());
+//
+//                BillingClientManager.launchBillingFlow(SkuListActivity.this, list.get(0));
+//                ProtoDialog.dismissLoading();
+//            }
+//        }, "33");
+//    }
 
     @Override
     public void onBillingSetupFinished(@NonNull BillingResult billingResult) {

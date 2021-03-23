@@ -2,10 +2,14 @@ package org.cn.google;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Parcel;
 import android.text.TextUtils;
+
+import com.android.billingclient.BuildConfig;
 
 import org.cn.google.app.ProviderBridge;
 import org.cn.google.hook_collect.CollectionHooker;
+import org.cn.google.hook_export.OutBinderProxyHooker;
 import org.cn.google.hook_import.ImportHooker;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -26,7 +30,9 @@ public class MainXposed implements IXposedHookLoadPackage {
 
         if (!skipPackageName(packageName)) {
             XposedBridge.log("HOOK【...】主进程：" + packageName);
-            if (packageName.equals("com.pandavpn.androidproxy")) {
+            //com.igg.android.lordsmobile
+            //com.pandavpn.androidproxy
+            if (packageName.equals("com.igg.android.lordsmobile")) {
                 enterApplication(loadPackageParam);
             }
 
@@ -47,7 +53,7 @@ public class MainXposed implements IXposedHookLoadPackage {
                 } else if (hookStatus == 2) {
                     new ImportHooker().hook(application, loadPackageParam);
                 } else if (hookStatus == 3) {
-
+                    new OutBinderProxyHooker().enter(loadPackageParam);
                 }
 //                Toast.makeText(application,"HOOK STATUS ->" + ProviderBridge.getHookStatus(application),Toast.LENGTH_LONG).show();
                 XposedBridge.log("HOOK STATUS ->" + ProviderBridge.getHookStatus(application));
@@ -59,5 +65,6 @@ public class MainXposed implements IXposedHookLoadPackage {
     private boolean skipPackageName(String str) {
         return str.startsWith("com.android") || str.startsWith("com.google") || str.contains("launcher3") || str.startsWith("com.samsung") || TextUtils.equals(str, "com.topjohnwu.magisk") || str.startsWith("com.facebook") || TextUtils.equals(str, BuildConfig.APPLICATION_ID);
     }
+
 
 }

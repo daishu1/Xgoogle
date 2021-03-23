@@ -40,6 +40,17 @@
         </activity>
         <activity android:name="com.android.billingclient.api.ProxyBillingActivity" />
 
+        <activity
+            android:name="org.cn.google.PayActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Dialog">
+            <intent-filter>
+                <action android:name="org.cn.google.PayActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+
     </application>
 
 </manifest>

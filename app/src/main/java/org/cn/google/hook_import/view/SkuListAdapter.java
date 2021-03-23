@@ -19,15 +19,22 @@ import java.util.List;
 
 public class SkuListAdapter extends BaseAdapter {
 
-    private List<String> skuList = new ArrayList();
+    private List<String> skuList;
 
     private Context mContext;
 
-    public SkuListAdapter(Context context) {
+    public SkuListAdapter(Context context, List<String> skuList) {
         this.mContext = context;
-        for (int i = 0; i < 10; i++) {
-            skuList.add(i + "测试");
-        }
+        this.skuList = skuList;
+//        for (int i = 0; i < 10; i++) {
+//            skuList.add(i + "测试");
+//        }
+    }
+
+    public void setNewInstance(List<String> skuList) {
+        this.skuList.clear();
+        this.skuList.addAll(skuList);
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -60,15 +67,15 @@ public class SkuListAdapter extends BaseAdapter {
             viewHolder.skuName.setGravity(Gravity.CENTER);
             viewHolder.skuName.setTextColor(Color.WHITE);
             viewHolder.skuName.setTextSize(12.0f);
-            viewHolder.skuName.setPadding(0, 25, 0, 25);
-            viewHolder.skuName.setLayoutParams(new LinearLayout.LayoutParams(-1, -2, 1.0f));
+            viewHolder.skuName.setPadding(0, 35, 0, 35);
+            viewHolder.skuName.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 1.0f));
 
             viewHolder.skuPrice = new TextView(this.mContext);
             viewHolder.skuPrice.setGravity(Gravity.CENTER);
             viewHolder.skuPrice.setTextColor(Color.WHITE);
             viewHolder.skuPrice.setTextSize(12.0f);
-            viewHolder.skuPrice.setPadding(0, 25, 0, 25);
-            viewHolder.skuPrice.setLayoutParams(new LinearLayout.LayoutParams(-1, -2, 1.0f));
+            viewHolder.skuPrice.setPadding(0, 35, 0, 35);
+            viewHolder.skuPrice.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 2.0f));
 
             linearLayout.addView(viewHolder.skuName);
             linearLayout.addView(viewHolder.skuPrice);

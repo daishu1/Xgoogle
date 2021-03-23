@@ -17,10 +17,7 @@ import androidx.annotation.Nullable;
 
 import org.cn.google.BillingClientManager;
 
-public class BillingActivity extends Activity implements View.OnClickListener {
-
-    LinearLayout mRootLinearLayout;
-    EditText mEditText;
+public class BillingActivity extends BaseSkuActivity {
 
     static final String KEY_RESULT_RECEIVER = "result_receiver";
     private static final int REQUEST_CODE_LAUNCH_ACTIVITY = 100;
@@ -31,58 +28,12 @@ public class BillingActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initRootView();
-        initTestButton();
-        initTestTextView();
-        initSkuListView();
-
         if (savedInstanceState == null) {
             handleEvent(getIntent());
             return;
         }
         this.mResultReceiver = (ResultReceiver) savedInstanceState.getParcelable(KEY_RESULT_RECEIVER);
 
-    }
-
-    @Override
-    public void onClick(View view) {
-
-    }
-
-    private void initRootView() {
-        mRootLinearLayout = new LinearLayout(this);
-        mRootLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        mRootLinearLayout.setBackgroundColor(Color.parseColor("#333333"));
-        LinearLayout.LayoutParams layoutParams =
-                new LinearLayout.LayoutParams(-1, -1);
-        mRootLinearLayout.setLayoutParams(layoutParams);
-        setContentView(mRootLinearLayout);
-    }
-
-    private void initTestButton() {
-        Button mButton = new Button(this);
-        mButton.setText("入库测试");
-        mButton.setBackgroundColor(Color.WHITE);
-        mButton.setTextColor(Color.BLACK);
-        mButton.setTextSize(15f);
-        mButton.setMinWidth(220);
-        mButton.setMinHeight(110);
-        mButton.setOnClickListener(this);
-        mRootLinearLayout.addView(mButton);
-    }
-
-    private void initSkuListView(){
-        ListView mListView = new ListView(this);
-        mListView.setAdapter(new SkuListAdapter(this));
-        mRootLinearLayout.addView(mListView);
-    }
-
-    private void initTestTextView() {
-        mEditText = new EditText(this);
-        mEditText.setText("log信息");
-        mEditText.setTextColor(Color.BLUE);
-        mEditText.setTextSize(13f);
-        mRootLinearLayout.addView(mEditText);
     }
 
     public void handleEvent(Intent intent) {
