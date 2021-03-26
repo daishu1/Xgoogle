@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +28,7 @@ import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
 import org.cn.google.app.AppConstance;
+import org.cn.google.mode.login.LoginResponse;
 
 import java.util.List;
 
@@ -60,7 +63,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void initData() {
+
+        LoginResponse.UserInfo userInfo = userInfo();
+        if (userInfo != null){
+            tvMainExitLogin.setText(userInfo.getUsername() + " · 登出");
+        }
+
         int status = SPStaticUtils.getInt(AppConstance.KEY_HOOK_STATUS);
         if (status == 1) {
             rbMainHookCollect.setChecked(true);
@@ -73,15 +83,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private LoginResponse.UserInfo userInfo(){
+        try {
+            String userInfoString = SPStaticUtils.getString(AppConstance.KEY_USER_INFO,"");
+            if (userInfoString.length() != 0) {
+                return GsonUtils.fromJson(userInfoString, LoginResponse.UserInfo.class);
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            Intent intent = new Intent();
+            intent.setClass((Context) this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        return null;
+    }
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.tvMainExitLogin) {
-            try {
-                Intent intent = new Intent("org.cn.google.PayActivity");
-                startActivity(intent);
-            } catch (Exception e) {
-                ToastUtils.showLong(e.getMessage());
-            }
+//            try {
+//                Intent intent = new Intent("org.cn.google.PayActivity");
+//                startActivity(intent);
+//            } catch (Exception e) {
+//                ToastUtils.showLong(e.getMessage());
+//            }
+            ToastUtils.showLong(SPStaticUtils.getString(AppConstance.HTTP_PUT_SKU_DETAILS));
         } else if (view.getId() == R.id.tvMainHookClear) {
             ToastUtils.showShort(SPStaticUtils.getInt(AppConstance.KEY_HOOK_STATUS));
             tvMainHookClear.setEnabled(false);

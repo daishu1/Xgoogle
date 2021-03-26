@@ -3,6 +3,7 @@ package org.cn.google.hook_import.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,20 +30,25 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
 
     }
 
+    @Override
+    public void onClick(View view) {
+        ProtoDialog.showLoadingDialog(this);
+        BillingClientManager.querySkuDetailsAsync("inapp", new SkuDetailsResponseListener() {
+            @Override
+            public final void onSkuDetailsResponse(@NonNull BillingResult billingResult, @Nullable List<SkuDetails> list) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("getResponseCode:").append(billingResult.getResponseCode()).append("\nList<SkuDetails>:").append(GsonUtils.toJson(list)).append("\n");
+                mEditText.setText(sb.toString());
+
+                BillingClientManager.launchBillingFlow(SkuListActivity.this, list.get(0));
+                ProtoDialog.dismissLoading();
+            }
+        }, "23438");
+    }
+
 //    @Override
-//    public void onClick(View view) {
-//        ProtoDialog.showLoadingDialog(this);
-//        BillingClientManager.querySkuDetailsAsync("inapp", new SkuDetailsResponseListener() {
-//            @Override
-//            public final void onSkuDetailsResponse(@NonNull BillingResult billingResult, @Nullable List<SkuDetails> list) {
-//                StringBuilder sb = new StringBuilder();
-//                sb.append("getResponseCode:").append(billingResult.getResponseCode()).append("\nList<SkuDetails>:").append(GsonUtils.toJson(list)).append("\n");
-//                mEditText.setText(sb.toString());
-//
-//                BillingClientManager.launchBillingFlow(SkuListActivity.this, list.get(0));
-//                ProtoDialog.dismissLoading();
-//            }
-//        }, "33");
+//    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//        super.onItemClick(adapterView, view, i, l);
 //    }
 
     @Override
@@ -57,7 +63,9 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
 
     @Override
     public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
-        mEditText.setText(mEditText.getText() + "\nonPurchasesUpdated:" + billingResult.getResponseCode() + "\nList<Purchase>:" + GsonUtils.toJson(list));
+        for (int i = 0; i < list.size(); i++) {
+            mEditText.setText(mEditText.getText() + "\njsonPurchaseInfo" + list.get(i).getOriginalJson() + "\nmSignature" + list.get(i).getSignature());
+        }
     }
 
     @Override

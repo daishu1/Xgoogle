@@ -7,10 +7,12 @@ import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.SPStaticUtils;
+import com.lzy.okgo.OkGo;
 
 import org.cn.google.app.AppConstance;
 import org.cn.google.mode.SkuDetailModel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,33 +70,21 @@ public class HookProvider extends BaseProvider {
 
         //此处添加网络请求数据
 
+//        try {
+//            OkGo.<String>get("http://games.usbuydo.com/api/login/login")
+//                    .tag(this)
+//                    .execute();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         //此处添加网络请求数据
 
         //一下测试数据
         String json = "skuJson=" + skuJson +
-                "gameName=" + gameName +
-                "packageName=" + packageName;
-
-        SkuTestModel skuTestModel;
-        try {
-            String skuDetails = SPStaticUtils.getString(AppConstance.HTTP_PUT_SKU_DETAILS);
-            skuTestModel = GsonUtils.fromJson(skuDetails, SkuTestModel.class);
-        } catch (Exception e) {
-            skuTestModel = new SkuTestModel();
-        }
-        skuTestModel.setGameName(gameName);
-        skuTestModel.setPackageName(packageName);
-//        SkuDetailModel skuDetailModel;
-//        try {
-//            skuDetailModel = GsonUtils.fromJson(skuJson, SkuDetailModel.class);
-//        } catch (Exception e) {
-//            skuDetailModel = null;
-//        }
-//        if (skuDetailModel != null) {
-//            skuTestModel.getSkuDetailModels().add(skuDetailModel);
-//        }
-        SPStaticUtils.put(AppConstance.HTTP_PUT_SKU_DETAILS, GsonUtils.toJson(skuTestModel));
+                ",gameName=" + gameName +
+                ",packageName=" + packageName;
+        SPStaticUtils.put(AppConstance.HTTP_PUT_SKU_DETAILS, GsonUtils.toJson(json));
 
         bundle.putInt("code", 0);
     }

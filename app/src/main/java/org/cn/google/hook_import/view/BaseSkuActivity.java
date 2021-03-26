@@ -114,10 +114,10 @@ public class BaseSkuActivity extends Activity implements View.OnClickListener, A
 
     @Override
     public void onClick(View view) {
-        for (int i = 0; i < 10; i++) {
-            mSkuList.add(i + "测试111");
-        }
-        mSkuListAdapter.setNewInstance(mSkuList);
+//        for (int i = 0; i < 10; i++) {
+//            mSkuList.add(i + "测试111");
+//        }
+//        mSkuListAdapter.setNewInstance(mSkuList);
     }
 
     @Override

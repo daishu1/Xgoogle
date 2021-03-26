@@ -41,6 +41,8 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxjava:3.0.6'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'com.blankj:utilcode:1.25.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.lzy.net:okgo:3.0.4'
     compileOnly 'de.robv.android.xposed:api:82'
     compileOnly 'de.robv.android.xposed:api:82:sources'
 
