@@ -1,28 +1,16 @@
-package org.cn.google.mode.login;
+package org.cn.google.mode;
 
-import org.cn.google.mode.BaseResponse;
 
-public class LoginResponse extends BaseResponse {
-    private LoginData data;
+public class LoginResponse {
 
-    public LoginData getData() {
-        return data;
+    private UserInfo userinfo;
+
+    public UserInfo getUserinfo() {
+        return userinfo;
     }
 
-    public void setData(LoginData data) {
-        this.data = data;
-    }
-
-    public static class LoginData {
-        private UserInfo userinfo;
-
-        public UserInfo getUserinfo() {
-            return userinfo;
-        }
-
-        public void setUserinfo(UserInfo userinfo) {
-            this.userinfo = userinfo;
-        }
+    public void setUserinfo(UserInfo userinfo) {
+        this.userinfo = userinfo;
     }
 
     public static class UserInfo {

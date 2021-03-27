@@ -38,8 +38,8 @@
             android:layout_marginTop="50dp"
             android:ems="10"
             android:hint="请输入账号"
-            android:inputType="textPersonName"
-            android:textColor="@color/purple_200"
+            android:inputType="textCapCharacters"
+            android:textColor="@color/white"
             android:textColorHint="@color/FF_CCCCCC"
             android:theme="@style/MyEditText" />
 
@@ -51,7 +51,7 @@
             android:ems="10"
             android:hint="请输入密码"
             android:inputType="textPassword"
-            android:textColor="@color/purple_200"
+            android:textColor="@color/white"
             android:textColorHint="@color/FF_CCCCCC"
             android:theme="@style/MyEditText" />
 

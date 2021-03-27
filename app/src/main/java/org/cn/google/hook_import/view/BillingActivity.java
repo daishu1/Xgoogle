@@ -1,21 +1,12 @@
 package org.cn.google.hook_import.view;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import org.cn.google.BillingClientManager;
 
 public class BillingActivity extends BaseSkuActivity {
 
@@ -65,17 +56,13 @@ public class BillingActivity extends BaseSkuActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 100) {
+        if (requestCode == 100 && resultCode == -1) {
 //            int responseCodeFromIntent = C0089BillingHelper.getResponseCodeFromIntent(intent, TAG);
 //            if (!(resultCode == -1 && responseCodeFromIntent == 0)) {
 //                C0089BillingHelper.logWarn(TAG, "Activity finished with resultCode " + i2 + " and billing's responseCode: " + responseCodeFromIntent);
 //            }
-//            this.mResultReceiver.send(responseCodeFromIntent, data == null ? null : data.getExtras());
-//            return;
-//        }
-        this.mResultReceiver.send(resultCode, data == null ? null : data.getExtras());
-
-        mEditText.setText(mEditText.getText() + "\nonActivityResult:" + requestCode + "," + resultCode);
+            this.mResultReceiver.send(resultCode, data == null ? null : data.getExtras());
+        }
 
     }
 }

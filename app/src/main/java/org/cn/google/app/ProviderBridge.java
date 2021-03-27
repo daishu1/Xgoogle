@@ -19,6 +19,10 @@ public class ProviderBridge {
         return getProviderData(context, AppConstance.HTTP_GET_SKU_LIST, null, bundle);
     }
 
+    public static Bundle httpInStore(Context context, Bundle bundle) throws Exception {
+        return getProviderData(context, AppConstance.HTTP_IN_STORE, null, bundle);
+    }
+
     public static Bundle getProviderData(Context context, String str, String str2, Bundle bundle) throws Exception {
         try {
             return context.getContentResolver().call(Uri.parse(AppConstance.AUTHORITIES), str, str2, bundle);

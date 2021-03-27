@@ -6,15 +6,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.GsonUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SPStaticUtils;
 import com.lzy.okgo.OkGo;
 
 import org.cn.google.app.AppConstance;
-import org.cn.google.mode.SkuDetailModel;
+import org.cn.google.mode.BaseResponse;
+import org.cn.google.mode.LoginResponse;
+import org.cn.google.mode.SkuDetailsModel;
+import org.cn.google.util.JsonUtils;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Response;
 
 public class HookProvider extends BaseProvider {
     @Nullable
@@ -48,6 +52,8 @@ public class HookProvider extends BaseProvider {
             httpGetSkuList(extras, bundle);
         } else if (AppConstance.HTTP_PUT_SKU_DETAILS.equals(method)) {
             httpPutSkuDetails(extras, bundle);
+        } else if (AppConstance.HTTP_IN_STORE.equals(method)) {
+            httpInStore(extras, bundle);
         }
     }
 
@@ -63,30 +69,32 @@ public class HookProvider extends BaseProvider {
      * 上传sku详情
      */
     private void httpPutSkuDetails(Bundle extras, Bundle bundle) {
-
         String skuJson = extras.getString("skuJson");
         String gameName = extras.getString("gameName");
         String packageName = extras.getString("packageName");
-
         //此处添加网络请求数据
-
-//        try {
-//            OkGo.<String>get("http://games.usbuydo.com/api/login/login")
-//                    .tag(this)
-//                    .execute();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
+        try {
+            LoginResponse.UserInfo userInfo =
+                    GsonUtils.fromJson(SPStaticUtils.getString(AppConstance.KEY_USER_INFO), LoginResponse.UserInfo.class);
+            Response response = OkGo.<String>get("http://games.usbuydo.com/api/games/addGame")
+                    .params("token", userInfo.getToken())
+                    .params("skuJson", skuJson)
+                    .params("gameName", gameName)
+                    .params("packageName", packageName)
+                    .execute();
+            if (response.code() != 200)
+                throw new Exception(response.message() + response.code());
+            BaseResponse baseResponse = GsonUtils.fromJson(response.body().string(), BaseResponse.class);
+            if (baseResponse.getCode() != 200) {
+                throw new Exception(baseResponse.getMsg());
+            }
+            bundle.putInt("code", 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            bundle.putInt("code", -1);
+            bundle.putString("message", e.getMessage());
+        }
         //此处添加网络请求数据
-
-        //一下测试数据
-        String json = "skuJson=" + skuJson +
-                ",gameName=" + gameName +
-                ",packageName=" + packageName;
-        SPStaticUtils.put(AppConstance.HTTP_PUT_SKU_DETAILS, GsonUtils.toJson(json));
-
-        bundle.putInt("code", 0);
     }
 
     /**
@@ -97,42 +105,55 @@ public class HookProvider extends BaseProvider {
 
         //此处添加网络请求数据
 
-
+        try {
+            LoginResponse.UserInfo userInfo =
+                    GsonUtils.fromJson(SPStaticUtils.getString(AppConstance.KEY_USER_INFO), LoginResponse.UserInfo.class);
+            Response response = OkGo.post("http://games.usbuydo.com//api/games/price")
+                    .params("token", userInfo.getToken())
+                    .params("packageName", packageName)
+                    .execute();
+            if (response.code() != 200)
+                throw new Exception(response.message() + response.code());
+            BaseResponse baseResponse = GsonUtils.fromJson(response.body().string(), BaseResponse.class);
+            if (baseResponse.getCode() != 200)
+                throw new Exception(baseResponse.getMsg());
+            bundle.putInt("code", 0);
+            bundle.putString("data", GsonUtils.toJson(baseResponse.getData()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            bundle.putInt("code", -1);
+            bundle.putString("message", e.getMessage());
+        }
         //此处添加网络请求数据
 
         //一下测试数据
-        GsonUtils.fromJson("", List.class);
-        bundle.putInt("code", 0);
-        bundle.putString("data", "这是测试数据->获取SKU列表" + packageName);
     }
 
-    class SkuTestModel {
-        private List<SkuDetailModel> skuDetailModels = new ArrayList<>();
-        private String gameName;
-        private String packageName;
-
-        public List<SkuDetailModel> getSkuDetailModels() {
-            return skuDetailModels;
-        }
-
-        public void setSkuDetailModels(List<SkuDetailModel> skuDetailModels) {
-            this.skuDetailModels = skuDetailModels;
-        }
-
-        public String getGameName() {
-            return gameName;
-        }
-
-        public void setGameName(String gameName) {
-            this.gameName = gameName;
-        }
-
-        public String getPackageName() {
-            return packageName;
-        }
-
-        public void setPackageName(String packageName) {
-            this.packageName = packageName;
+    /**
+     * 入库
+     */
+    private void httpInStore(Bundle extras, Bundle bundle) {
+        String jsonPurchaseInfo = extras.getString("jsonPurchaseInfo");
+        String mSignature = extras.getString("mSignature");
+        try {
+            LoginResponse.UserInfo userInfo =
+                    GsonUtils.fromJson(SPStaticUtils.getString(AppConstance.KEY_USER_INFO), LoginResponse.UserInfo.class);
+            Response response = OkGo.post("http://games.usbuydo.com//api/Transaction/input")
+                    .params("token", userInfo.getToken())
+                    .params("jsonPurchaseInfo", jsonPurchaseInfo)
+                    .params("mSignature", mSignature)
+                    .execute();
+            if (response.code() != 200)
+                throw new Exception(response.message() + response.code());
+            BaseResponse baseResponse = GsonUtils.fromJson(response.body().string(), BaseResponse.class);
+            if (baseResponse.getCode() != 200)
+                throw new Exception(baseResponse.getMsg());
+            bundle.putInt("code", 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            bundle.putInt("code", -1);
+            bundle.putString("message", e.getMessage());
         }
     }
+
 }

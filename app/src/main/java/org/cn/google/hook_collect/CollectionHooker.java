@@ -55,7 +55,7 @@ public class CollectionHooker {
             String str4 = stringArrayList.get(0);
             httpStoreSku(currentApplication, str4);
         } catch (Exception e) {
-            ToastUtils.showShort("采集失败");
+            ToastUtils.showShort("采集失败" + e.getMessage());
         }
     }
 
@@ -67,15 +67,12 @@ public class CollectionHooker {
         bundle.putString("gameName", charSequence);
         bundle.putString("packageName", packageName);
         Bundle httpCollSku = ProviderBridge.httpPutSkuDetails(context, bundle);
-        if (checkResultCode(httpCollSku)) {
+        if (ProviderBridge.checkResultCode(httpCollSku)) {
             ToastUtils.showShort("采集成功");
             return;
         }
-        throw new Exception(ProviderBridge.getResultMsg(httpCollSku));
-    }
-
-    public boolean checkResultCode(Bundle bundle) {
-        return bundle.getInt("code") == 0;
+        String message = ProviderBridge.getResultMsg(httpCollSku);
+        throw new Exception(message);
     }
 
 

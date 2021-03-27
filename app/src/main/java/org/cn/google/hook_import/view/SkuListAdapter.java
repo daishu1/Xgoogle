@@ -5,46 +5,40 @@ import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
+import org.cn.google.mode.SkuDetailsModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SkuListAdapter extends BaseAdapter {
 
-    private List<String> skuList;
+    private List<SkuDetailsModel> skuDetailsModels;
 
     private Context mContext;
 
-    public SkuListAdapter(Context context, List<String> skuList) {
+    public SkuListAdapter(Context context, List<SkuDetailsModel> skuDetailsModels) {
         this.mContext = context;
-        this.skuList = skuList;
-//        for (int i = 0; i < 10; i++) {
-//            skuList.add(i + "测试");
-//        }
+        this.skuDetailsModels = skuDetailsModels;
     }
 
-    public void setNewInstance(List<String> skuList) {
-        this.skuList.clear();
-        this.skuList.addAll(skuList);
+    public void setNewInstance(List<SkuDetailsModel> skuDetailsModels) {
+        this.skuDetailsModels.clear();
+        this.skuDetailsModels.addAll(skuDetailsModels);
         this.notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return skuList.size();
+        return skuDetailsModels.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return skuList.get(i);
+        return skuDetailsModels.get(i);
     }
 
     @Override
@@ -85,8 +79,8 @@ public class SkuListAdapter extends BaseAdapter {
             view = convertView;
             viewHolder = (ViewHolder) view.getTag();
         }
-        viewHolder.skuName.setText("sku名称" + this.skuList.get(i));
-        viewHolder.skuPrice.setText("sku价格US$20.99");
+        viewHolder.skuName.setText(this.skuDetailsModels.get(i).getTitle());
+        viewHolder.skuPrice.setText(this.skuDetailsModels.get(i).getMoney());
 
         return view;
     }
