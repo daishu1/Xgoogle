@@ -52,10 +52,9 @@ public class MainXposed implements IXposedHookLoadPackage {
                     new CollectionHooker().hook(loadPackageParam);
                 } else if (hookStatus == 2) {
                     new ImportHooker().hook(application, loadPackageParam);
-                } else if (hookStatus == 3) {
+                } else if (hookStatus == 3 || hookStatus == 4) {
                     new OutBinderProxyHooker().enter(loadPackageParam);
                 }
-//                Toast.makeText(application,"HOOK STATUS ->" + ProviderBridge.getHookStatus(application),Toast.LENGTH_LONG).show();
                 XposedBridge.log("HOOK STATUS ->" + ProviderBridge.getHookStatus(application));
             }
         }});

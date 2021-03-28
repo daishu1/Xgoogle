@@ -21,7 +21,7 @@ import org.cn.google.mode.LoginResponse;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private TextView tvMainExitLogin, tvMainHookClear, tvMainUpdateTime, tvMainVersionCode;
-    private RadioButton rbMainHookCollect, rbMainHookImport, rbMainHookExport;
+    private RadioButton rbMainHookCollect, rbMainHookImport, rbMainHookExport, rbMainHookOffline;
     private RadioGroup rgMainHookGroup;
 
     @Override
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rbMainHookCollect = findViewById(R.id.rbMainHookCollect);
         rbMainHookImport = findViewById(R.id.rbMainHookImport);
         rbMainHookExport = findViewById(R.id.rbMainHookExport);
+        rbMainHookOffline = findViewById(R.id.rbMainHookOffline);
         tvMainExitLogin = findViewById(R.id.tvMainExitLogin);
         tvMainUpdateTime = findViewById(R.id.tvMainUpdateTime);
         tvMainVersionCode = findViewById(R.id.tvMainVersionCode);
@@ -64,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             rbMainHookImport.setChecked(true);
         } else if (status == 3) {
             rbMainHookExport.setChecked(true);
+        } else if (status == 4) {
+            rbMainHookOffline.setChecked(true);
         } else {
             rgMainHookGroup.clearCheck();
         }
@@ -89,14 +92,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.tvMainExitLogin) {
-//            SPStaticUtils.remove(AppConstance.KEY_USER_INFO);
-//            Intent intent = new Intent();
-//            intent.setClass((Context) this, LoginActivity.class);
-//            startActivity(intent);
-//            finish();
-            LoginResponse.UserInfo userInfo =
-                    GsonUtils.fromJson(SPStaticUtils.getString(AppConstance.KEY_USER_INFO), LoginResponse.UserInfo.class);
-            ToastUtils.showShort(userInfo.getToken());
+            SPStaticUtils.remove(AppConstance.KEY_USER_INFO);
+            Intent intent = new Intent();
+            intent.setClass((Context) this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+//            LoginResponse.UserInfo userInfo =
+//                    GsonUtils.fromJson(SPStaticUtils.getString(AppConstance.KEY_USER_INFO), LoginResponse.UserInfo.class);
+//            ToastUtils.showShort(userInfo.getToken());
         } else if (view.getId() == R.id.tvMainHookClear) {
             tvMainHookClear.setEnabled(false);
             rgMainHookGroup.clearCheck();
@@ -115,6 +118,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (i == R.id.rbMainHookExport && rbMainHookExport.isChecked()) {
             tvMainHookClear.setEnabled(true);
             SPStaticUtils.put(AppConstance.KEY_HOOK_STATUS, 3);
+        } else if (i == R.id.rbMainHookOffline && rbMainHookOffline.isChecked()) {
+            tvMainHookClear.setEnabled(true);
+            SPStaticUtils.put(AppConstance.KEY_HOOK_STATUS, 4);
         }
     }
 }

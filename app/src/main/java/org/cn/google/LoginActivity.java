@@ -66,28 +66,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
 
-        List<String> strings = new ArrayList<>();
-        strings.add("====1");
-        strings.add("====2");
-        strings.add("====3");
-        Flowable.fromIterable(strings)
-                .onBackpressureDrop()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) throws Throwable {
-                        LogUtils.e("=======   " + s);
-                        Thread.sleep(500);
-                        LogUtils.e("演示" + s);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Throwable {
-                        LogUtils.e("===========错误===" + throwable.getMessage());
-                    }
-                });
-
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
@@ -110,53 +88,53 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //            }
 //        }).start();
 
-//        Observable.combineLatest(Observable.just(edLoginNickname.getText().toString()), Observable.just(edLoginNickPwd.getText().toString()), (s, s2) -> {
-//            Response response = OkGo.post("http://games.usbuydo.com/api/login/login")
-//                    .params("username", s)
-//                    .params("password", s2)
-//                    .params("device_id", "1234567890")
-//                    .execute();
-//            if (response.code() != 200) {
-//                throw new Exception(response.message());
-//            }
-//            return GsonUtils.fromJson(response.body().string(), BaseResponse.class);
-//        })
-//                .map(new Function<BaseResponse, LoginResponse.UserInfo>() {
-//                    @Override
-//                    public LoginResponse.UserInfo apply(BaseResponse baseResponse) throws Throwable {
-//                        if (baseResponse.getCode() != 200) {
-//                            throw new Exception(baseResponse.getMsg());
-//                        }
-//                        return JsonUtils.objectToClass(baseResponse.getData(), LoginResponse.class).getUserinfo();
-//                    }
-//                })
-//                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Observer<LoginResponse.UserInfo>() {
-//                    @Override
-//                    public void onSubscribe(@NonNull Disposable d) {
-//                        ProtoDialog.showLoadingDialog(LoginActivity.this);
-//                    }
-//
-//                    @Override
-//                    public void onNext(LoginResponse.@NonNull UserInfo userInfo) {
-//                        SPStaticUtils.put(AppConstance.KEY_USER_INFO, GsonUtils.toJson(userInfo));
-//                        Intent intent = new Intent();
-//                        intent.setClass((Context) LoginActivity.this, MainActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//                    }
-//
-//                    @Override
-//                    public void onError(@NonNull Throwable e) {
-//                        ProtoDialog.dismissLoading();
-//                        ToastUtils.showShort(e.getMessage());
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        ProtoDialog.dismissLoading();
-//                    }
-//                });
+        Observable.combineLatest(Observable.just(edLoginNickname.getText().toString()), Observable.just(edLoginNickPwd.getText().toString()), (s, s2) -> {
+            Response response = OkGo.post("http://games.usbuydo.com/api/login/login")
+                    .params("username", s)
+                    .params("password", s2)
+                    .params("device_id", "1234567890")
+                    .execute();
+            if (response.code() != 200) {
+                throw new Exception(response.message());
+            }
+            return GsonUtils.fromJson(response.body().string(), BaseResponse.class);
+        })
+                .map(new Function<BaseResponse, LoginResponse.UserInfo>() {
+                    @Override
+                    public LoginResponse.UserInfo apply(BaseResponse baseResponse) throws Throwable {
+                        if (baseResponse.getCode() != 200) {
+                            throw new Exception(baseResponse.getMsg());
+                        }
+                        return JsonUtils.objectToClass(baseResponse.getData(), LoginResponse.class).getUserinfo();
+                    }
+                })
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<LoginResponse.UserInfo>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        ProtoDialog.showLoadingDialog(LoginActivity.this);
+                    }
+
+                    @Override
+                    public void onNext(LoginResponse.@NonNull UserInfo userInfo) {
+                        SPStaticUtils.put(AppConstance.KEY_USER_INFO, GsonUtils.toJson(userInfo));
+                        Intent intent = new Intent();
+                        intent.setClass((Context) LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        ProtoDialog.dismissLoading();
+                        ToastUtils.showShort(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        ProtoDialog.dismissLoading();
+                    }
+                });
     }
 
     @Override

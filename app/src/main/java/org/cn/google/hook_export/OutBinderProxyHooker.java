@@ -88,7 +88,7 @@ public class OutBinderProxyHooker {
                 super.beforeHookedMethod(methodHookParam);
                 if (TextUtils.equals((String) methodHookParam.args[0], "BUY_INTENT")) {
                     Application currentApplication = AndroidAppHelper.currentApplication();
-                    Intent intent = new Intent("org.cn.google.PayActivity");
+                    Intent intent = new Intent("org.cn.google.hook_export.view.PayActivity");
                     intent.putExtra("sku", sku);
                     intent.putExtra("packageName", currentApplication.getPackageName());
                     methodHookParam.setResult(PendingIntent.getActivity(currentApplication, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT));

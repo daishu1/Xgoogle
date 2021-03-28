@@ -24,16 +24,15 @@
         android:background="@color/black" />
 
     <ListView
-        android:id="@+id/list_view"
+        android:id="@+id/payListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dividerHeight="2px"
-        android:visibility="gone" />
+        android:dividerHeight="2px" />
 
     <TextView
-        android:id="@+id/tv_empty"
+        android:id="@+id/payTextEmpty"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:gravity="center"
         android:text="无可用数据~"
         android:textColor="@color/black"

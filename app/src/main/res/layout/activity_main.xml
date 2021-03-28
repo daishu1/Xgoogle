@@ -75,6 +75,23 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
+            <RadioButton
+                android:id="@+id/rbMainHookOffline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@null"
+                android:button="@null"
+                android:drawableStart="@drawable/main_selected_3"
+                android:drawableLeft="@drawable/main_selected_3"
+                android:drawableEnd="@drawable/main_selected_arrow"
+                android:drawableRight="@drawable/main_selected_arrow"
+                android:drawablePadding="15dp"
+                android:text="离 线 出 库"
+                android:textColor="@color/tv_checked_ash_white"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
         </RadioGroup>
 
         <TextView

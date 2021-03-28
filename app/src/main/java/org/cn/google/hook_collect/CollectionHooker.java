@@ -53,6 +53,8 @@ public class CollectionHooker {
                 throw new Exception("谷歌请求档位信息失败");
             }
             String str4 = stringArrayList.get(0);
+
+            XposedBridge.log("采集成功：" + str4);
             httpStoreSku(currentApplication, str4);
         } catch (Exception e) {
             ToastUtils.showShort("采集失败" + e.getMessage());

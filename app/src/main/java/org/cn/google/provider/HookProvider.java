@@ -83,10 +83,10 @@ public class HookProvider extends BaseProvider {
                     .params("packageName", packageName)
                     .execute();
             if (response.code() != 200)
-                throw new Exception(response.message() + response.code());
+                throw new Exception("Response-" + response.message() +"-"+ response.code());
             BaseResponse baseResponse = GsonUtils.fromJson(response.body().string(), BaseResponse.class);
             if (baseResponse.getCode() != 200) {
-                throw new Exception(baseResponse.getMsg());
+                throw new Exception("BaseResponse-"+baseResponse.getMsg()+"-"+baseResponse.getCode());
             }
             bundle.putInt("code", 0);
         } catch (Exception e) {
@@ -113,10 +113,10 @@ public class HookProvider extends BaseProvider {
                     .params("packageName", packageName)
                     .execute();
             if (response.code() != 200)
-                throw new Exception(response.message() + response.code());
+                throw new Exception("Response-" + response.message() +"-"+ response.code());
             BaseResponse baseResponse = GsonUtils.fromJson(response.body().string(), BaseResponse.class);
             if (baseResponse.getCode() != 200)
-                throw new Exception(baseResponse.getMsg());
+                throw new Exception("BaseResponse-"+baseResponse.getMsg()+"-"+baseResponse.getCode());
             bundle.putInt("code", 0);
             bundle.putString("data", GsonUtils.toJson(baseResponse.getData()));
         } catch (Exception e) {
@@ -144,10 +144,10 @@ public class HookProvider extends BaseProvider {
                     .params("mSignature", mSignature)
                     .execute();
             if (response.code() != 200)
-                throw new Exception(response.message() + response.code());
+                throw new Exception("Response-" + response.message() +"-"+ response.code());
             BaseResponse baseResponse = GsonUtils.fromJson(response.body().string(), BaseResponse.class);
             if (baseResponse.getCode() != 200)
-                throw new Exception(baseResponse.getMsg());
+                throw new Exception("BaseResponse-"+baseResponse.getMsg()+"-"+baseResponse.getCode());
             bundle.putInt("code", 0);
         } catch (Exception e) {
             e.printStackTrace();

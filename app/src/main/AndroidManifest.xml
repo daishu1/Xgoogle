@@ -46,11 +46,11 @@
         <activity android:name="com.android.billingclient.api.ProxyBillingActivity" />
 
         <activity
-            android:name="org.cn.google.PayActivity"
+            android:name="org.cn.google.hook_export.view.PayActivity"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.Dialog">
             <intent-filter>
-                <action android:name="org.cn.google.PayActivity" />
+                <action android:name="org.cn.google.hook_export.view.PayActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
