@@ -173,6 +173,36 @@ public class PayActivity extends Activity implements ExportAdapter.ItemOnClickIn
     @Override
     public void onItemClick(View view, int position) {
         Toast.makeText((Context) this, "" + position, Toast.LENGTH_SHORT).show();
+
+        ExportDetails details = exportDetailsList.get(position);
+        ExportRequest exportRequest = new ExportRequest();
+        exportRequest.setProductId(details.getProductId());
+        exportRequest.setPackageName(details.getPackageName());
+
+        Observable.just(exportRequest).map(new Function<ExportRequest, BaseResponse>() {
+            @Override
+            public BaseResponse apply(ExportRequest exportRequest) throws Throwable {
+
+                String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
+                if (api.length() == 0) {
+                    throw new Exception("API地址配置为空");
+                }
+                LoginResponse.UserInfo userInfo =
+                        GsonUtils.fromJson(SPStaticUtils.getString(AppConstance.KEY_USER_INFO), LoginResponse.UserInfo.class);
+                Response response = OkGo.post(api + "/api/Transaction/outbound")
+                        .params("token", userInfo.getToken())
+                        .params("productId", exportRequest.productId)
+                        .params("packageName", exportRequest.packageName)
+                        .execute();
+                if (response.code() != 200)
+                    throw new Exception("Response-" + response.message() + "-" + response.code());
+                BaseResponse baseResponse = GsonUtils.fromJson(response.body().string(), BaseResponse.class);
+                if (baseResponse.getCode() != 200)
+                    throw new Exception("BaseResponse-" + baseResponse.getMsg() + "-" + baseResponse.getCode());
+                return baseResponse;
+            }
+        }).subscribe();
+
     }
 
 

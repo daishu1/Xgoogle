@@ -128,7 +128,7 @@
             android:layout_marginLeft="1dp"
             android:layout_marginTop="20dp"
             android:drawablePadding="5dp"
-            android:text="更新时间：2012/10/10"
+            android:text="更新时间：2021/04/01"
             android:textColor="@color/white"
             android:textSize="13sp"
             app:drawableStartCompat="@drawable/ic_40001" />
@@ -139,7 +139,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:drawablePadding="5dp"
-            android:text="版本号：V15.0.1"
+            android:text="版本号：V1.0.0"
             android:textColor="@color/white"
             android:textSize="13sp"
             app:drawableStartCompat="@drawable/ic_50001" />
