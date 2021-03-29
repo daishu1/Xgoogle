@@ -9,12 +9,12 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blankj.utilcode.util.GsonUtils;
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SPStaticUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.lzy.okgo.OkGo;
@@ -23,19 +23,13 @@ import org.cn.google.app.AppConstance;
 import org.cn.google.common.ProtoDialog;
 import org.cn.google.mode.BaseResponse;
 import org.cn.google.mode.LoginResponse;
-import org.cn.google.mode.SkuDetailsModel;
 import org.cn.google.util.JsonUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.Response;
@@ -43,7 +37,8 @@ import okhttp3.Response;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
 
     private EditText edLoginNickname, edLoginNickPwd;
-    private Button btnLoginNickConfirm;
+    private Button btnLoginConfirm;
+    private TextView tvLoginApiConfig;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,41 +50,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void initView() {
         edLoginNickname = findViewById(R.id.edLoginNickname);
         edLoginNickPwd = findViewById(R.id.edLoginNickPwd);
-        btnLoginNickConfirm = findViewById(R.id.btnLoginNickConfirm);
+        btnLoginConfirm = findViewById(R.id.btnLoginConfirm);
+        tvLoginApiConfig = findViewById(R.id.tvLoginApiConfig);
 
         edLoginNickname.addTextChangedListener(this);
         edLoginNickPwd.addTextChangedListener(this);
 
-        btnLoginNickConfirm.setOnClickListener(this);
+        btnLoginConfirm.setOnClickListener(this);
+        tvLoginApiConfig.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Response response = OkGo.post("http://games.usbuydo.com//api/games/price")
-//                            .params("packageName", "com.igg.android.lordsmobile")
-//                            .execute();
-//                    if (response.code() != 200)
-//                        throw new Exception(response.message() + response.code());
-////                    String body = response.body().string();
-//                    BaseResponse baseResponse = GsonUtils.fromJson(response.body().string(), BaseResponse.class);
-//                    if (baseResponse.getCode() != 1)
-//                        throw new Exception(baseResponse.getMsg());
-//                    List<SkuDetailsModel> skuDetailsModels = JsonUtils.stringToList(baseResponse.getData(), SkuDetailsModel.class);
-//                    LogUtils.e(JsonUtils.objectToString(skuDetailsModels));
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    LogUtils.e(e.getMessage());
-//                }
-//            }
-//        }).start();
+        if (view.getId() == R.id.tvLoginApiConfig) {
+            Intent intent = new Intent();
+            intent.setClass((Context) this, ConfigActivity.class);
+            startActivity(intent);
+        }
+
+        if (view.getId() != R.id.btnLoginConfirm)
+            return;
+        String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
+        if (api.length() == 0) {
+            ToastUtils.showShort("API未配置");
+            return;
+        }
 
         Observable.combineLatest(Observable.just(edLoginNickname.getText().toString()), Observable.just(edLoginNickPwd.getText().toString()), (s, s2) -> {
-            Response response = OkGo.post("http://games.usbuydo.com/api/login/login")
+            Response response = OkGo.post(api + "/api/login/login")
                     .params("username", s)
                     .params("password", s2)
                     .params("device_id", "1234567890")
@@ -149,6 +138,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void afterTextChanged(Editable editable) {
-        btnLoginNickConfirm.setEnabled(!TextUtils.isEmpty(edLoginNickname.getText()) && !TextUtils.isEmpty(edLoginNickPwd.getText()));
+        btnLoginConfirm.setEnabled(!TextUtils.isEmpty(edLoginNickname.getText()) && !TextUtils.isEmpty(edLoginNickPwd.getText()));
     }
 }

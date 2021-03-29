@@ -23,6 +23,7 @@ import org.cn.google.R;
 import org.cn.google.app.AppConstance;
 import org.cn.google.mode.BaseResponse;
 import org.cn.google.mode.ExportDetails;
+import org.cn.google.mode.LoginResponse;
 import org.cn.google.util.JsonUtils;
 
 import java.util.ArrayList;
@@ -79,7 +80,15 @@ public class PayActivity extends Activity implements ExportAdapter.ItemOnClickIn
         Observable.just(exportRequest).map(new Function<ExportRequest, BaseResponse>() {
             @Override
             public BaseResponse apply(ExportRequest exportRequest) throws Throwable {
-                Response response = OkGo.post("http://games.usbuydo.com//api/Transaction/table")
+
+                String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
+                if (api.length() == 0) {
+                    throw new Exception("API地址配置为空");
+                }
+                LoginResponse.UserInfo userInfo =
+                        GsonUtils.fromJson(SPStaticUtils.getString(AppConstance.KEY_USER_INFO), LoginResponse.UserInfo.class);
+                Response response = OkGo.post(api + "/api/Transaction/table")
+                        .params("token", userInfo.getToken())
                         .params("productId", exportRequest.productId)
                         .params("packageName", exportRequest.packageName)
                         .execute();

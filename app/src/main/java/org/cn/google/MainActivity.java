@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if (view.getId() == R.id.tvMainExitLogin) {
             SPStaticUtils.remove(AppConstance.KEY_USER_INFO);
+            SPStaticUtils.remove(AppConstance.KEY_HOOK_STATUS);
             Intent intent = new Intent();
             intent.setClass((Context) this, LoginActivity.class);
             startActivity(intent);

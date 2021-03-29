@@ -21,6 +21,8 @@ import java.util.List;
 import okhttp3.Response;
 
 public class HookProvider extends BaseProvider {
+
+
     @Nullable
     @Override
     public Bundle call(@NonNull String method, @Nullable String arg, @Nullable Bundle extras) {
@@ -74,19 +76,23 @@ public class HookProvider extends BaseProvider {
         String packageName = extras.getString("packageName");
         //此处添加网络请求数据
         try {
+            String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
+            if (api.length() == 0) {
+                throw new Exception("API地址配置为空");
+            }
             LoginResponse.UserInfo userInfo =
                     GsonUtils.fromJson(SPStaticUtils.getString(AppConstance.KEY_USER_INFO), LoginResponse.UserInfo.class);
-            Response response = OkGo.<String>get("http://games.usbuydo.com/api/games/addGame")
+            Response response = OkGo.<String>get(api + "/api/games/addGame")
                     .params("token", userInfo.getToken())
                     .params("skuJson", skuJson)
                     .params("gameName", gameName)
                     .params("packageName", packageName)
                     .execute();
             if (response.code() != 200)
-                throw new Exception("Response-" + response.message() +"-"+ response.code());
+                throw new Exception("Response-" + response.message() + "-" + response.code());
             BaseResponse baseResponse = GsonUtils.fromJson(response.body().string(), BaseResponse.class);
             if (baseResponse.getCode() != 200) {
-                throw new Exception("BaseResponse-"+baseResponse.getMsg()+"-"+baseResponse.getCode());
+                throw new Exception("BaseResponse-" + baseResponse.getMsg() + "-" + baseResponse.getCode());
             }
             bundle.putInt("code", 0);
         } catch (Exception e) {
@@ -106,17 +112,21 @@ public class HookProvider extends BaseProvider {
         //此处添加网络请求数据
 
         try {
+            String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
+            if (api.length() == 0) {
+                throw new Exception("API地址配置为空");
+            }
             LoginResponse.UserInfo userInfo =
                     GsonUtils.fromJson(SPStaticUtils.getString(AppConstance.KEY_USER_INFO), LoginResponse.UserInfo.class);
-            Response response = OkGo.post("http://games.usbuydo.com//api/games/price")
+            Response response = OkGo.post(api + "/api/games/price")
                     .params("token", userInfo.getToken())
                     .params("packageName", packageName)
                     .execute();
             if (response.code() != 200)
-                throw new Exception("Response-" + response.message() +"-"+ response.code());
+                throw new Exception("Response-" + response.message() + "-" + response.code());
             BaseResponse baseResponse = GsonUtils.fromJson(response.body().string(), BaseResponse.class);
             if (baseResponse.getCode() != 200)
-                throw new Exception("BaseResponse-"+baseResponse.getMsg()+"-"+baseResponse.getCode());
+                throw new Exception("BaseResponse-" + baseResponse.getMsg() + "-" + baseResponse.getCode());
             bundle.putInt("code", 0);
             bundle.putString("data", GsonUtils.toJson(baseResponse.getData()));
         } catch (Exception e) {
@@ -136,18 +146,22 @@ public class HookProvider extends BaseProvider {
         String jsonPurchaseInfo = extras.getString("jsonPurchaseInfo");
         String mSignature = extras.getString("mSignature");
         try {
+            String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
+            if (api.length() == 0) {
+                throw new Exception("API地址配置为空");
+            }
             LoginResponse.UserInfo userInfo =
                     GsonUtils.fromJson(SPStaticUtils.getString(AppConstance.KEY_USER_INFO), LoginResponse.UserInfo.class);
-            Response response = OkGo.post("http://games.usbuydo.com//api/Transaction/input")
+            Response response = OkGo.post(api + "/api/Transaction/input")
                     .params("token", userInfo.getToken())
                     .params("jsonPurchaseInfo", jsonPurchaseInfo)
                     .params("mSignature", mSignature)
                     .execute();
             if (response.code() != 200)
-                throw new Exception("Response-" + response.message() +"-"+ response.code());
+                throw new Exception("Response-" + response.message() + "-" + response.code());
             BaseResponse baseResponse = GsonUtils.fromJson(response.body().string(), BaseResponse.class);
             if (baseResponse.getCode() != 200)
-                throw new Exception("BaseResponse-"+baseResponse.getMsg()+"-"+baseResponse.getCode());
+                throw new Exception("BaseResponse-" + baseResponse.getMsg() + "-" + baseResponse.getCode());
             bundle.putInt("code", 0);
         } catch (Exception e) {
             e.printStackTrace();

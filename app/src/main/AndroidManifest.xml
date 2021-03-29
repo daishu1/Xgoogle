@@ -40,8 +40,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".ConfigActivity"
             android:launchMode="singleTop" />
+        <activity
+            android:name=".LoginActivity"
+            android:launchMode="singleTask" />
 
         <activity android:name="com.android.billingclient.api.ProxyBillingActivity" />
 
