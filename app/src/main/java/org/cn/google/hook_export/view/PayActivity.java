@@ -21,9 +21,11 @@ import com.lzy.okgo.OkGo;
 
 import org.cn.google.R;
 import org.cn.google.app.AppConstance;
+import org.cn.google.common.ProtoDialog;
 import org.cn.google.mode.BaseResponse;
 import org.cn.google.mode.ExportDetails;
 import org.cn.google.mode.LoginResponse;
+import org.cn.google.mode.ProductDetails;
 import org.cn.google.util.JsonUtils;
 
 import java.util.ArrayList;
@@ -135,13 +137,13 @@ public class PayActivity extends Activity implements ExportAdapter.ItemOnClickIn
                 });
     }
 
-    private void sentPayResult() {
-//        Intent intent = new Intent();
-//        intent.putExtra("INAPP_PURCHASE_DATA", "{\"orderId\":\"GPA.3332-8872-3426-32647\",\"packageName\":\"com.igg.android.lordsmobile\",\"productId\":\"23438\",\"purchaseTime\":1616837646887,\"purchaseState\":0,\"purchaseToken\":\"pbhkfnjddkbihjmcgkdfgggj.AO-J1Ox5fU-kqHrjprB2hVOq71Pr5P8lgI0DTNOvWr7D5-LSjaRYSIBDpp_Zwf5LTRGAV2Sxz8mkKJVnbmmrpEVwDRkhYPTMturZ1SNuTwwUSfsoGV832so\",\"acknowledged\":false}");
-//        intent.putExtra("INAPP_DATA_SIGNATURE", "U5cFLDlToltbmvVmygRCgGqjLY+PVu3jpJK8E6Oe3d1hcZVC2FL6tziJy0rtFfL2xpjdGH9+45OD0V0oFFZUG3ZY0LyEP6SXtD3PMapsQprn7Y6nj8UudG9MkzT2ojszJQN+00lliUD++H40vDtu0j3vcqsKPaVPgzz/qJKMoGJVykMKAbh8xEOUmErzyB8sKQZPlg+/wYwBEZVQXhQPXPLX+Zt14dcXfkxmVfWG4zpfWSGUo5TK5vrySdGXYVj1UZ4sOwTyDWo0NiIoS+xcDrAArWsr0I+EtCSXHRiPtcIKCN8dY3N9G4iLYIqv/Cfs8khcYY9mQUIHkNehAzf42w==");
-//        intent.putExtra("RESPONSE_CODE", 0);
-//        setResult(-1, intent);
-//        finish();
+    private void sentPayResult(String jsonPurchaseInfo, String mSignature) {
+        Intent intent = new Intent();
+        intent.putExtra("INAPP_PURCHASE_DATA", jsonPurchaseInfo);
+        intent.putExtra("INAPP_DATA_SIGNATURE", mSignature);
+        intent.putExtra("RESPONSE_CODE", 0);
+        setResult(-1, intent);
+        finish();
     }
 
 
@@ -201,7 +203,37 @@ public class PayActivity extends Activity implements ExportAdapter.ItemOnClickIn
                     throw new Exception("BaseResponse-" + baseResponse.getMsg() + "-" + baseResponse.getCode());
                 return baseResponse;
             }
-        }).subscribe();
+        }).map(new Function<BaseResponse, ProductDetails>() {
+            @Override
+            public ProductDetails apply(BaseResponse baseResponse) throws Throwable {
+                if (baseResponse.getData() == null)
+                    throw new Exception("支付数据为空");
+                return JsonUtils.stringToObject(JsonUtils.objectToString(baseResponse.getData()), ProductDetails.class);
+            }
+        })
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ProductDetails>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        ProtoDialog.showLoadingDialog(PayActivity.this);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull ProductDetails productDetails) {
+                        sentPayResult(productDetails.getJsonPurchaseInfo(), productDetails.getmSignature());
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        ProtoDialog.dismissLoading();
+                        ProtoDialog.showMessageDialog(PayActivity.this, e.getMessage(), null);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        ProtoDialog.dismissLoading();
+                    }
+                });
 
     }
 
