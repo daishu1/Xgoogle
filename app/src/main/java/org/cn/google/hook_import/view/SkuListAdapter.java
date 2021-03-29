@@ -79,7 +79,7 @@ public class SkuListAdapter extends BaseAdapter {
             view = convertView;
             viewHolder = (ViewHolder) view.getTag();
         }
-        viewHolder.skuName.setText(this.skuDetailsModels.get(i).getTitle() + this.skuDetailsModels.get(i).getProductId());
+        viewHolder.skuName.setText(this.skuDetailsModels.get(i).getTitle());
         viewHolder.skuPrice.setText(this.skuDetailsModels.get(i).getMoney());
 
         return view;

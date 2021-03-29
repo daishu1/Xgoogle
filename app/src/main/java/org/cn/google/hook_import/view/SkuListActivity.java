@@ -74,7 +74,7 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
         if (responseCode == 0 && list != null) {
             handlePurchase(list);
         } else if (responseCode == 7) {
-            checkUnConsume();
+            //checkUnConsume();
         } else if (responseCode != 1) {
             ProtoDialog.showMessageDialog((Context) this, "Google error:" + GoogleCodeMsg.getResultMsg(responseCode), null);
         }
@@ -94,7 +94,7 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
         }
         if (arrayList.isEmpty())
             return;
-        String hint = "检测到" + arrayList.size() + "个订单未完成,请恢复卡单" + arrayList.get(0).getOriginalJson() + "\n" + arrayList.get(0).getSignature();
+        String hint = "检测到" + arrayList.size() + "个订单未完成,请恢复卡单";
         ProtoDialog.showMessageDialog((Context) this, hint, (dialogInterface, i) ->
                 handlePurchase(arrayList)
         );
