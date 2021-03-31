@@ -28,7 +28,7 @@ public class GoogleCodeMsg {
             case 8:
                 return "此ID暂未获取此应用，无法购买";
             default:
-                return "";
+                return "Google Play 未知错误";
         }
     }
 

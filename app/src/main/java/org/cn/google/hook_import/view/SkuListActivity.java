@@ -12,10 +12,12 @@ import androidx.annotation.Nullable;
 
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsResponseListener;
+import com.google.gson.Gson;
 
 import org.cn.google.BillingClientManager;
 import org.cn.google.app.ProviderBridge;
@@ -53,9 +55,13 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
                 if (responseCode != 0 || list == null) {
                     ProtoDialog.showMessageDialog((Context) SkuListActivity.this, GoogleCodeMsg.getResultMsg(responseCode), (dialogInterface, i1) ->
                             dialogInterface.dismiss());
+                } else if (list.size() == 0) {
+                    ProtoDialog.showMessageDialog((Context) SkuListActivity.this, "Google 返回商品SKU详情为空！\n\"Google Play 不适用于此应用的相关交易\"", (dialogInterface, i1) ->
+                            dialogInterface.dismiss());
                 } else {
                     BillingClientManager.launchBillingFlow(SkuListActivity.this, list.get(0));
                 }
+
                 ProtoDialog.dismissLoading();
             }
         }, skuDetailsModels.get(i).getProductId());
@@ -79,7 +85,7 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
         if (responseCode == 0 && list != null) {
             handlePurchase(list);
         } else if (responseCode == 7) {
-            //checkUnConsume();
+            checkUnConsume();
         } else if (responseCode != 1) {
             ProtoDialog.showMessageDialog((Context) this, "Google error:" + GoogleCodeMsg.getResultMsg(responseCode), null);
         }
@@ -99,7 +105,7 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
         }
         if (arrayList.isEmpty())
             return;
-        String hint = "检测到" + arrayList.size() + "个订单未完成,请恢复卡单";
+        String hint = "检测到" + arrayList.size() + "个订单未完成,请恢复卡单" + arrayList.get(0).getOriginalJson();
         ProtoDialog.showMessageDialog((Context) this, hint, (dialogInterface, i) ->
                 handlePurchase(arrayList)
         );
@@ -107,7 +113,8 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
 
     public void handlePurchase(final List<Purchase> list) {
         ProtoDialog.showLoadingDialog((Context) this);
-        Flowable.fromIterable(list).onBackpressureDrop()
+        Flowable.fromIterable(list)
+//                .onBackpressureDrop()
                 .doOnNext(new Consumer<Purchase>() {
                     @Override
                     public void accept(Purchase purchase) throws Throwable {
@@ -147,7 +154,7 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
                     @Override
                     public void onError(Throwable t) {
                         ProtoDialog.dismissLoading();
-                        ProtoDialog.showMessageDialog((Context) SkuListActivity.this, "异常：" + t.getMessage(), null);
+                        ProtoDialog.showMessageDialog((Context) SkuListActivity.this, t.getMessage(), null);
                     }
 
                     @Override

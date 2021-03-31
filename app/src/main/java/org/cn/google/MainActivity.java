@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (userInfo != null) {
             tvMainExitLogin.setText(userInfo.getUsername() + " · 登出");
         }
-        tvMainVersionCode.setText("版本号：" +AppUtils.getAppVersionName());
+        tvMainVersionCode.setText("版本号：V" +AppUtils.getAppVersionName());
 
         int status = SPStaticUtils.getInt(AppConstance.KEY_HOOK_STATUS);
         if (status == 1) {

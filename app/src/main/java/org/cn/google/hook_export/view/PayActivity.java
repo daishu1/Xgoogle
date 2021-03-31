@@ -202,7 +202,6 @@ public class PayActivity extends Activity implements ExportAdapter.ItemOnClickIn
                     if (baseResponse.getCode() != 200)
                         throw new Exception("BaseResponse-" + baseResponse.getMsg() + "-" + baseResponse.getCode());
                     return baseResponse;
-//                    return new BaseResponse();
                 }
             }).map(new Function<BaseResponse, ProductDetails>() {
                 @Override

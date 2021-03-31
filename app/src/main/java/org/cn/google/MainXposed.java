@@ -29,13 +29,14 @@ public class MainXposed implements IXposedHookLoadPackage {
         String packageName = loadPackageParam.processName;
 
         if (!skipPackageName(packageName)) {
-            XposedBridge.log("HOOK【...】主进程：" + packageName);
+            XposedBridge.log("HOOK【" + packageName + "】主进程");
+            //com.denachina.g23002013.android
             //com.igg.android.lordsmobile
-            //com.pandavpn.androidproxy
-            if (packageName.equals("com.igg.android.lordsmobile")) {
-                enterApplication(loadPackageParam);
-            }
-
+            //com.gamania.lineagem
+//            if (packageName.equals("com.gamania.lineagem")) {
+//                enterApplication(loadPackageParam);
+//            }
+            enterApplication(loadPackageParam);
         }
     }
 
