@@ -21,13 +21,16 @@ import org.cn.google.BillingClientManager;
 import org.cn.google.app.ProviderBridge;
 import org.cn.google.common.ProtoDialog;
 import org.cn.google.util.GoogleCodeMsg;
+import org.reactivestreams.Publisher;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import io.reactivex.rxjava3.subscribers.DisposableSubscriber;
 
@@ -37,6 +40,7 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BillingClientManager.init(this, this, this);
+        BillingClientManager.connectionService();
     }
 
     @Override
@@ -55,6 +59,7 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
                 ProtoDialog.dismissLoading();
             }
         }, skuDetailsModels.get(i).getProductId());
+
     }
 
     @Override
@@ -112,6 +117,20 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
                         Bundle httpInStore = ProviderBridge.httpInStore((Context) SkuListActivity.this, bundle);
                         if (!ProviderBridge.checkResultCode(httpInStore))
                             throw new Exception(ProviderBridge.getResultMsg(httpInStore));
+                    }
+                })
+                .concatMap(new Function<Purchase, Publisher<Purchase>>() {
+                    @Override
+                    public Publisher<Purchase> apply(Purchase purchase) throws Throwable {
+                        return Flowable.create(emitter -> BillingClientManager.consumeAsync(purchase, (billingResult, s) -> {
+                            int responseCode = billingResult.getResponseCode();
+                            if (responseCode != 0) {
+                                emitter.onError(new Exception("Google确认订单失败\n重新点击档位 恢复卡单\n" + GoogleCodeMsg.getResultMsg(responseCode)));
+                            } else {
+                                emitter.onNext(purchase);
+                            }
+                            emitter.onComplete();
+                        }), BackpressureStrategy.BUFFER);
                     }
                 })
                 .subscribeOn(Schedulers.io())
