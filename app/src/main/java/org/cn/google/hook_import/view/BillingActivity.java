@@ -8,6 +8,8 @@ import android.os.ResultReceiver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.billingclient.api.BillingResult;
+
 public class BillingActivity extends BaseSkuActivity {
 
     static final String KEY_RESULT_RECEIVER = "result_receiver";
@@ -56,13 +58,55 @@ public class BillingActivity extends BaseSkuActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100 && resultCode == -1) {
+        if (requestCode == 100) {
 //            int responseCodeFromIntent = C0089BillingHelper.getResponseCodeFromIntent(intent, TAG);
 //            if (!(resultCode == -1 && responseCodeFromIntent == 0)) {
 //                C0089BillingHelper.logWarn(TAG, "Activity finished with resultCode " + i2 + " and billing's responseCode: " + responseCodeFromIntent);
 //            }
-            this.mResultReceiver.send(resultCode, data == null ? null : data.getExtras());
+            int responseCodeFromIntent = getResponseCodeFromIntent(data, TAG);
+            this.mResultReceiver.send(responseCodeFromIntent, data == null ? null : data.getExtras());
         }
 
     }
+
+    public static int getResponseCodeFromIntent(Intent intent, String tag) {
+        return getBillingResultFromIntent(intent, tag).getResponseCode();
+    }
+
+    public static BillingResult getBillingResultFromIntent(Intent intent, String tag) {
+        if (intent != null) {
+            return BillingResult.newBuilder().setResponseCode(getResponseCodeFromBundle(intent.getExtras(), tag)).setDebugMessage(getDebugMessageFromBundle(intent.getExtras(), tag)).build();
+        }
+        return BillingResult.newBuilder().setResponseCode(6).setDebugMessage("An internal error occurred.").build();
+    }
+
+    public static int getResponseCodeFromBundle(Bundle bundle, String tag) {
+        if (bundle == null) {
+            return 6;
+        }
+        Object responseCode = bundle.get("RESPONSE_CODE");
+        if (responseCode == null) {
+            return 0;
+        } else if (responseCode instanceof Integer) {
+            return ((Integer) responseCode).intValue();
+        } else {
+            return 6;
+        }
+    }
+
+    public static String getDebugMessageFromBundle(Bundle bundle, String tag) {
+        if (bundle == null) {
+            return "";
+        }
+        Object debugMessage = bundle.get("DEBUG_MESSAGE");
+        if (debugMessage == null) {
+            return "";
+        } else if (debugMessage instanceof String) {
+            return (String) debugMessage;
+        } else {
+            return "";
+        }
+    }
+
+
 }

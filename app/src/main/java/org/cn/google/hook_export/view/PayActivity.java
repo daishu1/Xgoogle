@@ -174,66 +174,71 @@ public class PayActivity extends Activity implements ExportAdapter.ItemOnClickIn
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText((Context) this, "" + position, Toast.LENGTH_SHORT).show();
 
-        ExportDetails details = exportDetailsList.get(position);
-        ExportRequest exportRequest = new ExportRequest();
-        exportRequest.setProductId(details.getProductId());
-        exportRequest.setPackageName(details.getPackageName());
+        try {
+            ExportDetails details = exportDetailsList.get(position);
+            ExportRequest exportRequest = new ExportRequest();
+            exportRequest.setProductId(details.getProductId());
+            exportRequest.setPackageName(details.getPackageName());
 
-        Observable.just(exportRequest).map(new Function<ExportRequest, BaseResponse>() {
-            @Override
-            public BaseResponse apply(ExportRequest exportRequest) throws Throwable {
+            Observable.just(exportRequest).map(new Function<ExportRequest, BaseResponse>() {
+                @Override
+                public BaseResponse apply(ExportRequest exportRequest) throws Throwable {
 
-                String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
-                if (api.length() == 0) {
-                    throw new Exception("API地址配置为空");
+                    String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
+                    if (api.length() == 0) {
+                        throw new Exception("API地址配置为空");
+                    }
+                    LoginResponse.UserInfo userInfo =
+                            GsonUtils.fromJson(SPStaticUtils.getString(AppConstance.KEY_USER_INFO), LoginResponse.UserInfo.class);
+                    Response response = OkGo.post(api + "/api/Transaction/outbound")
+                            .params("token", userInfo.getToken())
+                            .params("productId", exportRequest.productId)
+                            .params("packageName", exportRequest.packageName)
+                            .execute();
+                    if (response.code() != 200)
+                        throw new Exception("Response-" + response.message() + "-" + response.code());
+                    BaseResponse baseResponse = GsonUtils.fromJson(response.body().string(), BaseResponse.class);
+                    if (baseResponse.getCode() != 200)
+                        throw new Exception("BaseResponse-" + baseResponse.getMsg() + "-" + baseResponse.getCode());
+                    return baseResponse;
+//                    return new BaseResponse();
                 }
-                LoginResponse.UserInfo userInfo =
-                        GsonUtils.fromJson(SPStaticUtils.getString(AppConstance.KEY_USER_INFO), LoginResponse.UserInfo.class);
-                Response response = OkGo.post(api + "/api/Transaction/outbound")
-                        .params("token", userInfo.getToken())
-                        .params("productId", exportRequest.productId)
-                        .params("packageName", exportRequest.packageName)
-                        .execute();
-                if (response.code() != 200)
-                    throw new Exception("Response-" + response.message() + "-" + response.code());
-                BaseResponse baseResponse = GsonUtils.fromJson(response.body().string(), BaseResponse.class);
-                if (baseResponse.getCode() != 200)
-                    throw new Exception("BaseResponse-" + baseResponse.getMsg() + "-" + baseResponse.getCode());
-                return baseResponse;
-            }
-        }).map(new Function<BaseResponse, ProductDetails>() {
-            @Override
-            public ProductDetails apply(BaseResponse baseResponse) throws Throwable {
-                if (baseResponse.getData() == null)
-                    throw new Exception("支付数据为空");
-                return JsonUtils.stringToObject(JsonUtils.objectToString(baseResponse.getData()), ProductDetails.class);
-            }
-        })
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ProductDetails>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-                        ProtoDialog.showLoadingDialog(PayActivity.this);
-                    }
+            }).map(new Function<BaseResponse, ProductDetails>() {
+                @Override
+                public ProductDetails apply(BaseResponse baseResponse) throws Throwable {
+                    if (baseResponse.getData() == null)
+                        throw new Exception("支付数据为空");
+                    return JsonUtils.objectToClass(baseResponse.getData(), ProductDetails.class);
+                }
+            })
+                    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<ProductDetails>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
+//                            ProtoDialog.showLoadingDialog(PayActivity.this);
+                        }
 
-                    @Override
-                    public void onNext(@NonNull ProductDetails productDetails) {
-                        sentPayResult(productDetails.getJsonPurchaseInfo(), productDetails.getmSignature());
-                    }
+                        @Override
+                        public void onNext(@NonNull ProductDetails productDetails) {
+                            sentPayResult(productDetails.getJsonPurchaseInfo(), productDetails.getmSignature());
+                            Toast.makeText((Context) PayActivity.this, "出库成功", Toast.LENGTH_SHORT).show();
+                        }
 
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        ProtoDialog.dismissLoading();
-                        ProtoDialog.showMessageDialog(PayActivity.this, e.getMessage(), null);
-                    }
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+//                            ProtoDialog.dismissLoading();
+                            ProtoDialog.showMessageDialog(PayActivity.this, e.getMessage(), null);
+                        }
 
-                    @Override
-                    public void onComplete() {
-                        ProtoDialog.dismissLoading();
-                    }
-                });
+                        @Override
+                        public void onComplete() {
+//                            ProtoDialog.dismissLoading();
+                        }
+                    });
+        } catch (Exception e) {
+            ProtoDialog.showMessageDialog(PayActivity.this, "===" + e.getMessage(), null);
+        }
 
     }
 
