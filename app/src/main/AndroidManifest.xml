@@ -51,13 +51,22 @@
         <activity
             android:name="org.cn.google.hook_export.view.PayActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Dialog">
+            android:theme="@style/alertDialogActivity">
             <intent-filter>
                 <action android:name="org.cn.google.hook_export.view.PayActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="org.cn.google.hook_collect.view.CollectActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/alertDialogActivity">
+            <intent-filter>
+                <action android:name="org.cn.google.hook_collect.view.CollectActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
     </application>
 

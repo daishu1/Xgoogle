@@ -114,7 +114,6 @@ public class SkuListActivity extends BillingActivity implements PurchasesUpdated
     public void handlePurchase(final List<Purchase> list) {
         ProtoDialog.showLoadingDialog((Context) this);
         Flowable.fromIterable(list)
-//                .onBackpressureDrop()
                 .doOnNext(new Consumer<Purchase>() {
                     @Override
                     public void accept(Purchase purchase) throws Throwable {
