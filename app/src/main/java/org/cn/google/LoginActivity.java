@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (view.getId() != R.id.btnLoginConfirm)
             return;
+        SPStaticUtils.put(AppConstance.KEY_CONFIG_API, AppConstance.HTTP_DEFAULT_HOST);
         String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, AppConstance.HTTP_DEFAULT_HOST);
         if (api.length() == 0) {
             ToastUtils.showShort("API未配置");
