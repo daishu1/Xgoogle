@@ -82,6 +82,7 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:drawableEndCompat="?attr/actionModePasteDrawable"
         app:drawableTint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"

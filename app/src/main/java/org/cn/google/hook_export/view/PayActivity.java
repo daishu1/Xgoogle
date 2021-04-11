@@ -86,7 +86,7 @@ public class PayActivity extends Activity implements ExportAdapter.ItemOnClickIn
             @Override
             public BaseResponse apply(ExportRequest exportRequest) throws Throwable {
 
-                String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
+                String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, AppConstance.HTTP_DEFAULT_HOST);
                 if (api.length() == 0) {
                     throw new Exception("API地址配置为空");
                 }
@@ -188,7 +188,7 @@ public class PayActivity extends Activity implements ExportAdapter.ItemOnClickIn
             @Override
             public BaseResponse apply(ExportRequest exportRequest) throws Throwable {
 
-                String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
+                String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, AppConstance.HTTP_DEFAULT_HOST);
                 if (api.length() == 0) {
                     throw new Exception("API地址配置为空");
                 }

@@ -50,7 +50,7 @@ public class CollectActivity extends Activity {
                 if (TextUtils.isEmpty(collectRequest.getSkuJson()) || TextUtils.isEmpty(collectRequest.getSkuJson()) || TextUtils.isEmpty(collectRequest.getSkuJson())) {
                     throw new Exception("采集到的参数有误！");
                 }
-                String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
+                String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, AppConstance.HTTP_DEFAULT_HOST);
                 if (api.length() == 0) {
                     throw new Exception("API地址配置为空");
                 }

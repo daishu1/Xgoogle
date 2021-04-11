@@ -76,7 +76,7 @@ public class HookProvider extends BaseProvider {
         String packageName = extras.getString("packageName");
         //此处添加网络请求数据
         try {
-            String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
+            String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, AppConstance.HTTP_DEFAULT_HOST);
             if (api.length() == 0) {
                 throw new Exception("API地址配置为空");
             }
@@ -112,7 +112,7 @@ public class HookProvider extends BaseProvider {
         //此处添加网络请求数据
 
         try {
-            String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
+            String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, AppConstance.HTTP_DEFAULT_HOST);
             if (api.length() == 0) {
                 throw new Exception("API地址配置为空");
             }
@@ -146,7 +146,7 @@ public class HookProvider extends BaseProvider {
         String jsonPurchaseInfo = extras.getString("jsonPurchaseInfo");
         String mSignature = extras.getString("mSignature");
         try {
-            String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, "");
+            String api = SPStaticUtils.getString(AppConstance.KEY_CONFIG_API, AppConstance.HTTP_DEFAULT_HOST);
             if (api.length() == 0) {
                 throw new Exception("API地址配置为空");
             }
