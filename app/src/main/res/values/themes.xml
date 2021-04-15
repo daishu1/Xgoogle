@@ -33,8 +33,8 @@
     </style>
 
     <style name="MyEditText" parent="Theme.AppCompat.Light">
-        <item name="colorControlNormal">@color/white</item>
-        <item name="colorControlActivated">@color/teal_700</item>
+        <item name="colorControlNormal">@color/FF_CCCCCC</item>
+        <item name="colorControlActivated">@color/black</item>
     </style>
 
     <style name="alertDialogActivity" parent="@style/Theme.AppCompat.Dialog">
@@ -50,6 +50,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="CustomProgressDialog" parent="@style/Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">false</item>

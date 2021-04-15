@@ -105,7 +105,7 @@ public class MainXposed implements IXposedHookLoadPackage {
     }
 
     private boolean skipPackageName(String str) {
-        return str.startsWith("com.android") || str.startsWith("com.google") || str.contains("launcher3") || str.startsWith("com.samsung") || TextUtils.equals(str, "com.topjohnwu.magisk") || str.startsWith("com.facebook") || TextUtils.equals(str, BuildConfig.APPLICATION_ID) || TextUtils.equals(str, "com.ap");
+        return str.startsWith("org.cn.google") || str.startsWith("com.android") || str.startsWith("com.google") || str.contains("launcher3") || str.startsWith("com.samsung") || TextUtils.equals(str, "com.topjohnwu.magisk") || str.startsWith("com.facebook") || TextUtils.equals(str, BuildConfig.APPLICATION_ID) || TextUtils.equals(str, "com.ap");
     }
 
 

@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/FF_333333"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:text="WELCOME"
-        android:textColor="@color/white"
+        android:text="欢迎"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -24,7 +24,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
-        android:background="@color/FF_333333"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,7 +39,7 @@
             android:ems="10"
             android:hint="请输入账号"
             android:inputType="textCapCharacters"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textColorHint="@color/FF_CCCCCC"
             android:theme="@style/MyEditText" />
 
@@ -52,7 +51,7 @@
             android:ems="10"
             android:hint="请输入密码"
             android:inputType="textPassword"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textColorHint="@color/FF_CCCCCC"
             android:theme="@style/MyEditText" />
 
@@ -64,10 +63,9 @@
             android:background="@drawable/bg_selector_05dp_main"
             android:enabled="false"
             android:gravity="center"
-            android:text="LOGIN"
+            android:text="登录"
             android:textColor="@color/white"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <TextView
@@ -87,6 +85,19 @@
         app:drawableTint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:text="需要各种游戏出入库开发的，可联系作者，可解决各种游戏无法出库问题"
+        android:textColor="@color/FF_333333"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

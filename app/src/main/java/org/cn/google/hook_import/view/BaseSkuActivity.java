@@ -58,7 +58,7 @@ public class BaseSkuActivity extends Activity implements AdapterView.OnItemClick
     private void initRootView() {
         mRootLinearLayout = new LinearLayout(this);
         mRootLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        mRootLinearLayout.setBackgroundColor(Color.parseColor("#333333"));
+        mRootLinearLayout.setBackgroundColor(Color.parseColor("#ffffff"));
         LinearLayout.LayoutParams layoutParams =
                 new LinearLayout.LayoutParams(-1, -1);
         mRootLinearLayout.setLayoutParams(layoutParams);
@@ -79,7 +79,7 @@ public class BaseSkuActivity extends Activity implements AdapterView.OnItemClick
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(-1, -1);
         layoutParams.setMargins(10, 10, 10, 10);
         mHintTextView.setLayoutParams(layoutParams);
-        mHintTextView.setTextColor(Color.WHITE);
+        mHintTextView.setTextColor(Color.BLACK);
         mHintTextView.setTextSize(13f);
         mHintTextView.setGravity(Gravity.CENTER);
         mRootLinearLayout.addView(mHintTextView);
@@ -97,7 +97,7 @@ public class BaseSkuActivity extends Activity implements AdapterView.OnItemClick
         GradientDrawable gradientDrawable1 = new GradientDrawable();
         gradientDrawable1.setShape(GradientDrawable.RECTANGLE);
         gradientDrawable1.setCornerRadius(10f);
-        gradientDrawable1.setColor(Color.parseColor("#018786"));
+        gradientDrawable1.setColor(Color.parseColor("#000000"));
         LinearLayout.LayoutParams layoutParams2 =
                 new LinearLayout.LayoutParams(ConvertUtils.dp2px(120), ConvertUtils.dp2px(40));
         layoutParams2.rightMargin = ConvertUtils.dp2px(10);
@@ -114,7 +114,7 @@ public class BaseSkuActivity extends Activity implements AdapterView.OnItemClick
         GradientDrawable gradientDrawable2 = new GradientDrawable();
         gradientDrawable2.setShape(GradientDrawable.RECTANGLE);
         gradientDrawable2.setCornerRadius(10f);
-        gradientDrawable2.setColor(Color.WHITE);
+        gradientDrawable2.setColor(Color.parseColor("#CCCCCC"));
         LinearLayout.LayoutParams layoutParams3 =
                 new LinearLayout.LayoutParams(-1, ConvertUtils.dp2px(40));
         mSearchEditText.setLayoutParams(layoutParams3);
@@ -137,7 +137,7 @@ public class BaseSkuActivity extends Activity implements AdapterView.OnItemClick
         gradientDrawable1.setShape(GradientDrawable.RECTANGLE);
         gradientDrawable1.setCornerRadius(10f);
         if (isConnected) {
-            gradientDrawable1.setColor(Color.parseColor("#018786"));
+            gradientDrawable1.setColor(Color.parseColor("#000000"));
             mStatusTextText.setText("GOOGLE TRUE");
         } else {
             gradientDrawable1.setColor(Color.parseColor("#999999"));

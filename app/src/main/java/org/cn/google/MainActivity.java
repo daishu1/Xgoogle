@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.SPStaticUtils;
+import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 
 import org.cn.google.app.AppConstance;
@@ -58,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (userInfo != null) {
             tvMainExitLogin.setText(userInfo.getUsername() + " · 登出");
         }
-        tvMainVersionCode.setText("版本号：V" +AppUtils.getAppVersionName());
+        tvMainUpdateTime.setText("更新时间：" + TimeUtils.millis2String(System.currentTimeMillis(),"yyyy/MM/dd"));
+        tvMainVersionCode.setText("版本号：V" + AppUtils.getAppVersionName());
 
         int status = SPStaticUtils.getInt(AppConstance.KEY_HOOK_STATUS);
         if (status == 1) {

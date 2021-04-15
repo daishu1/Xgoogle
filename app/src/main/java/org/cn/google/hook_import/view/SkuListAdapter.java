@@ -59,14 +59,14 @@ public class SkuListAdapter extends BaseAdapter {
 
             viewHolder.skuName = new TextView(this.mContext);
             viewHolder.skuName.setGravity(Gravity.CENTER);
-            viewHolder.skuName.setTextColor(Color.WHITE);
+            viewHolder.skuName.setTextColor(Color.BLACK);
             viewHolder.skuName.setTextSize(12.0f);
             viewHolder.skuName.setPadding(0, 35, 0, 35);
             viewHolder.skuName.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 1.0f));
 
             viewHolder.skuPrice = new TextView(this.mContext);
             viewHolder.skuPrice.setGravity(Gravity.CENTER);
-            viewHolder.skuPrice.setTextColor(Color.WHITE);
+            viewHolder.skuPrice.setTextColor(Color.BLACK);
             viewHolder.skuPrice.setTextSize(12.0f);
             viewHolder.skuPrice.setPadding(0, 35, 0, 35);
             viewHolder.skuPrice.setLayoutParams(new LinearLayout.LayoutParams(-1, -1, 2.0f));

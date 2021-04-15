@@ -108,7 +108,6 @@ public class HookProvider extends BaseProvider {
      */
     private void httpGetSkuList(Bundle extras, Bundle bundle) {
         String packageName = extras.getString("packageName");
-
         //此处添加网络请求数据
 
         try {

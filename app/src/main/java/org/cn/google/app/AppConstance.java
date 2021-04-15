@@ -2,6 +2,7 @@ package org.cn.google.app;
 
 public class AppConstance {
     public final static String HTTP_DEFAULT_HOST = "http://67.198.189.10";
+//    public final static String HTTP_DEFAULT_HOST = "http://games.usbuydo.com";
     public final static String KEY_CONFIG_API = "KEY_CONFIG_API";
     public final static String KEY_USER_INFO = "KEY_USER_INFO";
     public final static String KEY_HOOK_STATUS = "KEY_HOOK_STATUS";
